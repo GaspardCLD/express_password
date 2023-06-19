@@ -64,7 +64,7 @@ CREATE TABLE users (
   email varchar(255) UNIQUE NOT NULL,
   city varchar(255) DEFAULT NULL,
   language varchar(255) DEFAULT NULL,
-  hashedPassword varchar(255) NOT NULL
+  password varchar(255) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 INSERT INTO
@@ -74,7 +74,7 @@ INSERT INTO
     email,
     city,
     language,
-    hashedPassword
+    password
   )
 VALUES
   (
@@ -85,7 +85,7 @@ VALUES
     'English',
     "$argon2id$v=19$m=16,t=2,p=1$emVmZXpmemZlemVmZWR6ZXplZg$rqZkhxu5YbqCGHPNrjJZpQ"
   ),
-(
+  (
     'Valeriy',
     'Appius',
     'valeriy.ppius@example.com',
@@ -93,7 +93,7 @@ VALUES
     'Russian',
     '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlemZ6ZnpmZQ$eSetR6KPUNAGW+q+wDadcw'
   ),
-(
+  (
     'Ralf',
     'Geronimo',
     'ralf.geronimo@example.com',
@@ -101,7 +101,7 @@ VALUES
     'Italian',
     '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlemZ6ZnpmZXphZGF6ZGQ$a0bg5DZB6H6v3jjQC81DXg'
   ),
-(
+  (
     'Maria',
     'Iskandar',
     'maria.iskandar@example.com',
@@ -109,7 +109,7 @@ VALUES
     'German',
     '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlenplZHpkZnpmemZlemFkYXpkZA$V1qAnJDyMuuWG7g9yoGYXA'
   ),
-(
+  (
     'Jane',
     'Doe',
     'jane.doe@example.com',
@@ -117,7 +117,7 @@ VALUES
     'English',
     '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlenplZHpkZGZ6ZnpmZXphZGF6ZGQ$VCzq45PL9t8khtc44Kk5iw'
   ),
-(
+  (
     'Johanna',
     'Martino',
     'johanna.martino@example.com',

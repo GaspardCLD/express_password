@@ -60,13 +60,12 @@ const getUserById = (req, res) => {
 };
 
 const postUser = (req, res) => {
-  const { firstname, lastname, email, city, language, hashedPassword } =
-    req.body;
+  const { firstname, lastname, email, city, language, password } = req.body;
 
   database
     .query(
-      "INSERT INTO users(firstname, lastname, email, city, language, hashedPassword) VALUES (?, ?, ?, ?, ?, ?)",
-      [firstname, lastname, email, city, language, hashedPassword]
+      "INSERT INTO users(firstname, lastname, email, city, language, password) VALUES (?, ?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language, password]
     )
     .then(([result]) => {
       res.location(`/api/users/${result.insertId}`).sendStatus(201);
@@ -79,13 +78,12 @@ const postUser = (req, res) => {
 
 const updateUser = (req, res) => {
   const id = parseInt(req.params.id);
-  const { firstname, lastname, email, city, language, hashedPassword } =
-    req.body;
+  const { firstname, lastname, email, city, language, password } = req.body;
 
   database
     .query(
-      "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ?, hashedPassword = ? where id = ?",
-      [firstname, lastname, email, city, language, hashedPassword, id]
+      "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ?, password = ? where id = ?",
+      [firstname, lastname, email, city, language, password, id]
     )
     .then(([result]) => {
       if (result.affectedRows === 0) {
@@ -118,15 +116,23 @@ const deleteUser = (req, res) => {
     });
 };
 
-const login = (req, res) => {
-  const { email, password } = req.body;
+const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
+  const { email } = req.body;
 
-  if (email === "dwight@theoffice.com" && password === "123456") {
-    res.send("Credentials are valid");
-    res.sendStatus(200);
-  } else {
-    res.sendStatus(401);
-  }
+  database
+    .query("select * from users where email = ?", [email])
+    .then(([users]) => {
+      if (users[0] != null) {
+        req.user = users[0];
+        next();
+      } else {
+        res.sendStatus(401);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving data from database");
+    });
 };
 
 module.exports = {
@@ -135,5 +141,5 @@ module.exports = {
   postUser,
   updateUser,
   deleteUser,
-  login,
+  getUserByEmailWithPasswordAndPassToNext,
 };
