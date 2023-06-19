@@ -1,7 +1,12 @@
 require("dotenv").config();
 
 const express = require("express");
-const { hashPassword, verifyPassword, verifyToken } = require("./auth.js");
+const {
+  hashPassword,
+  verifyPassword,
+  verifyToken,
+  verifyUserByToken,
+} = require("./auth.js");
 
 const app = express();
 
@@ -50,5 +55,10 @@ app.post("/api/movies", movieHandlers.postMovie);
 app.put("/api/movies/:id", movieHandlers.updateMovie);
 app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 
-app.put("/api/users/:id", hashPassword, userHandlers.updateUser);
-app.delete("/api/users/:id", userHandlers.deleteUser);
+app.put(
+  "/api/users/:id",
+  verifyUserByToken,
+  hashPassword,
+  userHandlers.updateUser
+);
+app.delete("/api/users/:id", verifyUserByToken, userHandlers.deleteUser);

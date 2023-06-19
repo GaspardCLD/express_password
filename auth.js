@@ -68,8 +68,26 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+const verifyUserByToken = (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.payload = decoded;
+
+    if (req.payload.sub === parseInt(req.params.id)) {
+      next();
+    } else {
+      res.sendStatus(403);
+    }
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(401);
+  }
+};
+
 module.exports = {
   hashPassword,
   verifyPassword,
   verifyToken,
+  verifyUserByToken,
 };
